@@ -44,7 +44,13 @@ button{
 }
 </style>
 </head>
-
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js')
+    .then(() => console.log("Service Worker جاهز 🔥"))
+    .catch(err => console.log("خطأ:", err));
+}
+</script>
 <body>
 
 <h1>🔋 Battery Brain 48V</h1>
