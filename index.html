@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Battery Monitor 48V</title>
+
+<link rel="manifest" href="manifest.json">
+
+<style>
+body{
+  font-family: Arial;
+  background:#0f172a;
+  color:white;
+  text-align:center;
+  padding:20px;
+}
+.card{
+  background:#1e293b;
+  padding:20px;
+  border-radius:15px;
+  margin-top:20px;
+}
+input{
+  width:80%;
+  padding:10px;
+  font-size:20px;
+  border-radius:10px;
+  border:none;
+  text-align:center;
+}
+button{
+  margin-top:15px;
+  padding:10px 20px;
+  font-size:18px;
+  border:none;
+  border-radius:10px;
+  background:#22c55e;
+  color:white;
+}
+.result{
+  margin-top:20px;
+  font-size:22px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🔋 Battery Brain 48V</h1>
+
+<div class="card">
+  <p>ادخل الفولت الحالي:</p>
+  <input id="volt" type="number" step="0.1" placeholder="مثلاً 48">
+  <br>
+  <button onclick="calc()">احسب</button>
+
+  <div class="result" id="output"></div>
+</div>
+
+<script>
+function calc(){
+  let v = parseFloat(document.getElementById("volt").value);
+
+  if(!v){ return; }
+
+  // تقدير نسبة الشحن
+  let percent =
+    v>=56 ? 100 :
+    v>=52 ? 75 :
+    v>=50 ? 60 :
+    v>=48 ? 50 :
+    v>=47 ? 40 :
+    v>=46 ? 25 :
+    v>=45 ? 10 : 5;
+
+  // السعة بعد التقادم
+  let capacity = 6.5; // kWh
+
+  let remaining = capacity * (percent/100);
+
+  // الحمل
+  let load = 0.65; // kW
+
+  let hours = (remaining / load).toFixed(1);
+
+  let warning = "";
+  if(v <= 46){
+    warning = "⚠️ خطر: أوقف التشغيل!";
+  }
+
+  document.getElementById("output").innerHTML =
+    `🔋 الشحن: ${percent}% <br>
+     ⚡ الطاقة: ${remaining.toFixed(2)} kWh <br>
+     ⏳ الوقت المتبقي: ${hours} ساعة <br>
+     ${warning}`;
+}
+</script>
+
+</body>
+</html>
